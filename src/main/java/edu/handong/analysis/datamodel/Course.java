@@ -11,10 +11,12 @@ public class Course {
 	private int yearTaken;
 	private int semesterCourseTaken;
 	
-	public Course(String line) { // Split the line from constructor to initialize the field.
+	public Course(String line) { 
+		// Split the line from constructor to initialize the field.
 	
 	}
 	
+	//getter and setter
 	public String getStudentId() {
 		return this.studentId;
 	}
