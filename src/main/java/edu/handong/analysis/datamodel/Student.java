@@ -35,12 +35,22 @@ public class Student {
 		this.studentId = student_Id;
 	}
 	
-	public String getStudentId() {
-		return this.studentId;
+	public ArrayList<Course> getCoursesTaken() {
+		return this.coursesTaken;
 	}
 	
-	public void setStudentId(String student_Id) {
-		this.studentId = student_Id;
+	public void setCoursesTaken(ArrayList<Course> Courses_Taken) {
+		this.coursesTaken = Courses_Taken;
 	}
+	
+	/*
+	 * public HashMap<String,Integer> getSemestersByYearAndSemester(){ return
+	 * this.semestersByYearAndSemester; }
+	 */
+	
+	public void setSemestersByYearAndSemester(HashMap<String,Integer> Semesters_By_Year_And_Semester) {
+		this.semestersByYearAndSemester = Semesters_By_Year_And_Semester;
+	}
+	
 	
 }
