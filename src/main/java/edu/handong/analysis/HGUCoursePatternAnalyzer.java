@@ -32,7 +32,7 @@ public class HGUCoursePatternAnalyzer {
 		
 		String dataPath = args[0]; // csv file to be analyzed
 		String resultPath = args[1]; // the file path where the results are saved.
-		ArrayList<String> lines = Utils.getLines(dataPath, true);
+		ArrayList<String> lines = edu.handong.analysis.utils.Utils.getLines(dataPath, true);
 		
 		students = loadStudentCourseRecords(lines);
 		
@@ -43,7 +43,7 @@ public class HGUCoursePatternAnalyzer {
 		ArrayList<String> linesToBeSaved = countNumberOfCoursesTakenInEachSemester(sortedStudents);
 		
 		// Write a file (named like the value of resultPath) with linesTobeSaved.
-		Utils.writeAFile(linesToBeSaved, resultPath);
+		edu.handong.analysis.utils.Utils.writeAFile(linesToBeSaved, resultPath);
 	}
 	
 	/**
