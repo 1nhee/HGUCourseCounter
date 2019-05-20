@@ -13,30 +13,29 @@ import edu.handong.analysis.datamodel.*;
 public class Utils {
 	public static ArrayList<String> getLines(String file, boolean removeHeader){
 		
-		ArrayList<Student> studentArray = new ArrayList<Student>();
+		ArrayList<Course> courseArray = new ArrayList<Course>();
 		
 		String fileName = file;
+		
 		try{
 			// Skip the header line by reading and ignoring it
 			Scanner inputStream = new Scanner(new File(fileName)); 
-			String line = inputStream.nextLine();
+			String line;
 			
-			double total = 0;
 			// Read the rest of the file line by line
-			while (inputStream.hasNextLine())
-			{
+			while (inputStream.hasNextLine()){
 				
 				line = inputStream.nextLine();
 
 				// Turn the string into an array of strings
-				String studentId = line.split(",")[0];
-				int yearMonthGraduated = line.split(",")[1];
+				courseArray.studentId.add(line.split(",")[0]);
+				String yearMonthGraduated = line.split(",")[1];
 				String SecondMajor = line.split(",")[2];
 				String CourseCode = line.split(",")[3];
 				String CourseName = line.split(",")[4];
-				int CourseCredit = line.split(",")[5];
-				int YearTaken = line.split(",")[6];
-				int SemesterTaken = line.split(",")[7];
+				String CourseCredit = line.split(",")[5];
+				String YearTaken = line.split(",")[6];
+				String SemesterTaken = line.split(",")[7];
 				
 				// Extract each item into an appropriate variable
 				
