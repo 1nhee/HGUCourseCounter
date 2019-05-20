@@ -29,9 +29,14 @@ public class Utils {
 				line = inputStream.nextLine();
 
 				// Turn the string into an array of strings
-				String studentNumber = line.split(",")[0];
-				String studentNumber = line.split(",")[1];
-				
+				String studentId = line.split(",")[0];
+				int yearMonthGraduated = line.split(",")[1];
+				String SecondMajor = line.split(",")[2];
+				String CourseCode = line.split(",")[3];
+				String CourseName = line.split(",")[4];
+				int CourseCredit = line.split(",")[5];
+				int YearTaken = line.split(",")[6];
+				int SemesterTaken = line.split(",")[7];
 				
 				// Extract each item into an appropriate variable
 				
