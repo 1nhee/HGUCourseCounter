@@ -32,7 +32,7 @@ public class HGUCoursePatternAnalyzer {
 		
 		String dataPath = args[0]; // csv file to be analyzed
 		String resultPath = args[1]; // the file path where the results are saved.
-		ArrayList<String> lines = edu.handong.analysis.utils.Utils.getLines(dataPath, true);
+		ArrayList<String> lines = Utils.getLines(dataPath, true);
 		
 		students = loadStudentCourseRecords(lines);
 		
@@ -43,7 +43,7 @@ public class HGUCoursePatternAnalyzer {
 		ArrayList<String> linesToBeSaved = countNumberOfCoursesTakenInEachSemester(sortedStudents);
 		
 		// Write a file (named like the value of resultPath) with linesTobeSaved.
-		edu.handong.analysis.utils.Utils.writeAFile(linesToBeSaved, resultPath);
+		Utils.writeAFile(linesToBeSaved, resultPath);
 	}
 	
 	/**
@@ -56,7 +56,25 @@ public class HGUCoursePatternAnalyzer {
 		
 		// TODO: Implement this method
 		
-		return null; // do not forget to return a proper variable.
+	      for(String stringFromLine : lines) {
+	         Course CourseToAdd = new Course(stringFromLine);
+	         String studentIdToCheck = new String(CourseToAdd.getStudentId());
+	         
+	         //if the student Id already exists in HashMap
+	         if(!students.containsKey(studentIdToCheck) {
+	        	 Student studentToAdd = new Student(studentIdToCheck);
+	        	 students.put(studentIdToCheck, studentToAdd);
+	         }
+	         //if there is no same thing in HashMap 
+	         else {
+	        	 Student studentInstanceToAddCourse = new Student(studentIdToCheck);
+	        	 studentInstanceToAddCourse = students.get(studentIdToCheck);
+	        	 studentInstanceToAddCourse.addCourse(CourseToAdd);
+	        	 students.put(studentIdToCheck, studentInstanceToAddCourse);
+	         }
+	      }
+		
+		return students; // do not forget to return a proper variable.
 	}
 
 	/**
