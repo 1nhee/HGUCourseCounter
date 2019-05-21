@@ -74,7 +74,7 @@ public class HGUCoursePatternAnalyzer {
 	 */
 	private ArrayList<String> countNumberOfCoursesTakenInEachSemester(Map<String, Student> sortedStudents) {
 		
-		// TODO: Implement this method
+		// TODO: Implement this method 
 		
 		return null; // do not forget to return a proper variable.
 	}
