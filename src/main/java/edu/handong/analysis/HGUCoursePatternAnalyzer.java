@@ -93,7 +93,19 @@ public class HGUCoursePatternAnalyzer {
 	private ArrayList<String> countNumberOfCoursesTakenInEachSemester(Map<String, Student> sortedStudents) {
 		
 		// TODO: Implement this method 
+		ArrayList<String> numberOfCoursesTakenInEachSemester = new ArrayList<String>();
 		
-		return null; // do not forget to return a proper variable.
+		for(int i = 0; i < sortedStudents.size(); i++) {
+			Student studentToChaeck = new Student();
+			sortedStudents.get(key);
+			
+			//
+			if(studentToCheck.coursesTaken.semesterCourseTaken ) {
+				
+			}
+		}
+		
+		
+		return numberOfCoursesTakenInEachSemester; // do not forget to return a proper variable.
 	}
 }
