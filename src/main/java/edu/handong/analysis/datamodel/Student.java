@@ -2,6 +2,7 @@ package edu.handong.analysis.datamodel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import edu.handong.analysis.datamodel.Course;
 
 public class Student {
 	
@@ -11,10 +12,15 @@ public class Student {
 	                                                         // key: Year-Semester
 	                                                         // e.g., 2003-1, 
 	public Student(String studentId) { // constructor
+		this.studentId = studentId;
 	}
 
 	public void addCourse(Course newRecord) {
-		///add a Course instance created while reading line to the CourseTaken ArrayList in the Student instance.
+		/*add a Course instance created 
+		while reading line to the CourseTaken ArrayList in the Student instance.*/
+		
+		
+		
 	}
 	public HashMap<String,Integer> getSemestersByYearAndSemester(){
 		return semestersByYearAndSemester;
