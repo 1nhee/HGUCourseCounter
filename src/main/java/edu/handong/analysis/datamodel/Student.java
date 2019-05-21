@@ -24,11 +24,9 @@ public class Student {
 	}
 	public HashMap<String,Integer> getSemestersByYearAndSemester(){
 		/*creates a hashmap to store the student’s sequential semester information 
-		by using strong year and semester information.*/
+		by using string year and semester information.*/
 		
-		if(coursesTaken.get()) {
-			
-		}
+		if(coursesTaken.get(index)
 			
 		semestersByYearAndSemester.put(key, value)
 		
