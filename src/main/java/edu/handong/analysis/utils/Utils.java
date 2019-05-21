@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
-import edu.handong.analysis.datamodel.*;
 
 public class Utils {
 	public static ArrayList<String> getLines(String file, boolean removeHeader){
@@ -34,6 +33,10 @@ public class Utils {
 			System.out.println("Cannot find file " + fileName);
 		}
 		return stringArray;
+	}
+	
+	public static void writeAFile(ArrayList<String> lines, String targetFileName){
+		
 	}
 
 }
