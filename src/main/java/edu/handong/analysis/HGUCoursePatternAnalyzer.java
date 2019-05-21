@@ -61,14 +61,13 @@ public class HGUCoursePatternAnalyzer {
 	         String studentIdToCheck = new String(CourseToAdd.getStudentId());
 	         
 	         //if the student Id already exists in HashMap
-	         if(!students.containsKey(studentIdToCheck) {
+	         if(!students.containsKey(studentIdToCheck)) {
 	        	 Student studentToAdd = new Student(studentIdToCheck);
 	        	 students.put(studentIdToCheck, studentToAdd);
 	         }
 	         //if there is no same thing in HashMap 
 	         else {
-	        	 Student studentInstanceToAddCourse = new Student(studentIdToCheck);
-	        	 studentInstanceToAddCourse = students.get(studentIdToCheck);
+	        	 Student studentInstanceToAddCourse = students.get(studentIdToCheck);
 	        	 studentInstanceToAddCourse.addCourse(CourseToAdd);
 	        	 students.put(studentIdToCheck, studentInstanceToAddCourse);
 	         }
@@ -96,16 +95,9 @@ public class HGUCoursePatternAnalyzer {
 		ArrayList<String> numberOfCoursesTakenInEachSemester = new ArrayList<String>();
 		
 		for(int i = 0; i < sortedStudents.size(); i++) {
-			Student studentToChaeck = new Student();
-			sortedStudents.get(key);
-			
-			//
-			if(studentToCheck.coursesTaken.semesterCourseTaken ) {
-				
-			}
+			Student studentToChaeck = sortedStudents.get(i);
+			for()
+			numberOfCoursesTakenInEachSemester.add(studentToChaeck.getNumCourseInNthSementer(semester))
 		}
-		
-		
-		return numberOfCoursesTakenInEachSemester; // do not forget to return a proper variable.
-	}
+		return numberOfCoursesTakenInEachSemester; // do not forget to return a proper variable
 }
