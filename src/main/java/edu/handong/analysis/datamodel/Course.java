@@ -1,5 +1,5 @@
 package edu.handong.analysis.datamodel;
-
+ 
 public class Course {
 	private String studentId;
 	private String yearMonthGraduated;
