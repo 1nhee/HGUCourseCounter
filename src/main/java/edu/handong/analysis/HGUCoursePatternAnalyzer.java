@@ -93,12 +93,16 @@ public class HGUCoursePatternAnalyzer {
 		
 		// TODO: Implement this method 
 		ArrayList<String> numberOfCoursesTakenInEachSemester = new ArrayList<String>();
+		int inputSemester = 1;
 		
-		for(Object studentToCheck:sortedStudents) {
-			Student studentToChaeck = sortedStudents.get(i);
-			studentToChaeck
-			for()
-				numberOfCoursesTakenInEachSemester.add(studentToChaeck.getNumCourseInNthSemester(semester));
+		for(int  i = 1; i < sortedStudents.size(); i++) {
+			Student studentToCheck = sortedStudents.get(i);
+			for(int j = 1; j < studentToCheck.getSemestersByYearAndSemester().size(); j++) {
+				int numOfCoursesInNthSemester = studentToCheck.getNumCourseInNthSemester(j);
+				String toAdd = Integer.toString(numOfCoursesInNthSemester);
+				numberOfCoursesTakenInEachSemester.add(toAdd);
+			}
 		}
 		return numberOfCoursesTakenInEachSemester; // do not forget to return a proper variable
+	}
 }
