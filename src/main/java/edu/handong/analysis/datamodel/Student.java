@@ -26,44 +26,45 @@ public class Student {
 		/*creates a hashmap to store the student’s sequential semester information 
 		by using string year and semester information.*/
 		
-		int startYear = coursesTaken.get(0).getYearTaken();
-		int startSemester = coursesTaken.get(0).getSemesterCourseTaken();
-		int count = 0;
+		int yearToCheck = coursesTaken.get(0).getYearTaken();
+		int semesterToCheck = coursesTaken.get(0).getSemesterCourseTaken();
+		int whatSemester = 1;
+		
+		String startSemesterStrig  = yearToCheck + "-" + semesterToCheck; 
+				
+		semestersByYearAndSemester.put(startSemesterStrig, whatSemester++);
 		
 		for(Course courseToCheck:this.coursesTaken) {
-
-			int currYear = courseToCheck.getYearTaken();
-			int currSemester = courseToCheck.getSemesterCourseTaken();
-			String currYearAndSemester = currYear + "-" + currSemester;
-			
-			//first semester
-			if((currYear == startYear) && (currSemester != startSemester)) {
-				semestersByYearAndSemester.put(currYearAndSemester, 1);
-				count = 1;
-			}
-			
-			//second semester
-			if(count == 1) {
-				semestersByYearAndSemester.put(currYearAndSemester, 2);
-				count++;
-			}
-			
-			if(currYear != startYear)
-				semestersByYearAndSemester.put(currYearAndSemester, );
+				if(courseToCheck.getYearTaken() != yearToCheck || courseToCheck.getSemesterCourseTaken() != semesterToCheck) {
+					yearToCheck = courseToCheck.getYearTaken();
+					semesterToCheck = courseToCheck.getSemesterCourseTaken();
+					
+					semestersByYearAndSemester.put(yearToCheck + "-" + semesterToCheck, whatSemester++);
+				}
 		}
-		
-		
 		return this.semestersByYearAndSemester;
 	}
+	
 	public int getNumCourseInNthSemester(int semester) {
 		/*returns the number of subjects in the semester 
 		 * if you enter the sequential semester number.
 		HashMap에 key로 학기 수를 입력하면 그 학기 때 들었던  과목의 수를 return*/
+		
+		int numOfCoursesInNthSemester = 0;
+		int yearToCheck;
+		int semesterToCheck;
+		int inputSemesterToCheck;
 	
-		if(coursesTaken.)
-		
-		return numOfCourseTaken;
-		
+		for(Course courseToCheck:this.coursesTaken) {
+			yearToCheck = courseToCheck.getYearTaken();
+			semesterToCheck = courseToCheck.getSemesterCourseTaken();
+			inputSemesterToCheck = this.semestersByYearAndSemester.get(yearToCheck + "-" + semesterToCheck);
+			
+			if(inputSemesterToCheck == semester) {
+				numOfCoursesInNthSemester++;
+			}
+		} 
+		return numOfCoursesInNthSemester;
 	}
 
 	//getter and setter
