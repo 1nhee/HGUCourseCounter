@@ -1,4 +1,7 @@
 package edu.handong.analysis.datamodel;
+
+import java.lang.Integer;
+import java.lang.String;
  
 public class Course {
 	private String studentId;
@@ -13,14 +16,15 @@ public class Course {
 	
 	public Course(String line) { 
 		// Split the line from constructor to initialize the field.
-		this.studentId = line.split(",")[0];
-		this.yearMonthGraduated = line.split(",")[1];
-		this.secondMajor = line.split(",")[2];
-		this.courseCode = line.split(",")[3];
-		this.courseName = line.split(",")[4];
-		this.courseCredit = line.split(",")[5];
-		this.yearTaken = Integer.parseInt(line.split(",")[6]);
-		this.semesterCourseTaken = Integer.parseInt(line.split(",")[7]);
+		this.studentId = line.split(", ")[0];
+		this.yearMonthGraduated = line.split(", ")[1];
+		this.firstMajor = line.split(", ")[2];
+		this.secondMajor = line.split(", ")[3];
+		this.courseCode = line.split(", ")[4];
+		this.courseName = line.split(", ")[5];
+		this.courseCredit = line.split(", ")[6];
+		this.yearTaken = Integer.parseInt(line.split(", ")[7]);
+		this.semesterCourseTaken = Integer.parseInt(line.split(", ")[8]);
 	}
 	
 	//getter and setter
