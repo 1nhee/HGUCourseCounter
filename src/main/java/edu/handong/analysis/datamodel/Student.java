@@ -14,15 +14,16 @@ public class Student {
 	                                                         // e.g., 2003-1, 
 	public Student(String studentId) { // constructor
 		this.studentId = studentId;
+		coursesTaken = new ArrayList<Course>();
+		semestersByYearAndSemester = new HashMap<String,Integer>();
 	}
 
 	public void addCourse(Course newRecord) {
 		/*add a Course instance created 
 		while reading line to the CourseTaken ArrayList in the Student instance.*/
-		coursesTaken = new ArrayList<Course>();
 		this.coursesTaken.add(newRecord);
-		
 	}
+	
 	public HashMap<String,Integer> getSemestersByYearAndSemester(){
 		/*creates a hashmap to store the student’s sequential semester information 
 		by using string year and semester information.*/
@@ -32,15 +33,17 @@ public class Student {
 		int whatSemester = 1;
 		
 		String startSemesterStrig  = yearToCheck + "-" + semesterToCheck; 
-				
-		semestersByYearAndSemester.put(startSemesterStrig, whatSemester++);
+		
+		semestersByYearAndSemester.put(startSemesterStrig, whatSemester);
+		whatSemester++;
 		
 		for(Course courseToCheck:this.coursesTaken) {
 				if(courseToCheck.getYearTaken() != yearToCheck || courseToCheck.getSemesterCourseTaken() != semesterToCheck) {
 					yearToCheck = courseToCheck.getYearTaken();
 					semesterToCheck = courseToCheck.getSemesterCourseTaken();
 					
-					semestersByYearAndSemester.put(yearToCheck + "-" + semesterToCheck, whatSemester++);
+					semestersByYearAndSemester.put(yearToCheck + "-" + semesterToCheck, whatSemester);
+					whatSemester++;
 				}
 		}
 		return this.semestersByYearAndSemester;

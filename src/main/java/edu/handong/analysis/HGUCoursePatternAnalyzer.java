@@ -96,17 +96,16 @@ public class HGUCoursePatternAnalyzer {
 		// TODO: Implement this method 
 		ArrayList<String> numberOfCoursesTakenInEachSemester = new ArrayList<String>();
 		int totalSemester;
-		String studentId = new String();
 		
-		for(int  i = 1; i < sortedStudents.size(); i++) {
-			Student studentToCheck = sortedStudents.get(Integer.toString(i));
-			studentId = studentToCheck.getStudentId();
-			System.out.println(studentId);
+		for(int  i = 0; i < sortedStudents.size(); i++) {
+			String studentIdToCheck = String.format("%04d", i+1);
+			Student studentToCheck = sortedStudents.get(studentIdToCheck);
+			String studentId = studentToCheck.getStudentId();
 			totalSemester = studentToCheck.getSemestersByYearAndSemester().size();
 			
-			for(int j = 1; j < studentToCheck.getSemestersByYearAndSemester().size(); j++) {
-				int numOfCoursesInNthSemester = studentToCheck.getNumCourseInNthSemester(j);
-				String studentIdToAdd = String.format("%05d", studentId);
+			for(int j = 0; j < studentToCheck.getSemestersByYearAndSemester().size(); j++) {
+				int numOfCoursesInNthSemester = studentToCheck.getNumCourseInNthSemester(j+1);
+				String studentIdToAdd = studentId;
 				String toAdd = studentIdToAdd + "," + totalSemester + "," + j + "," + numOfCoursesInNthSemester;
 				numberOfCoursesTakenInEachSemester.add(toAdd);
 			}
