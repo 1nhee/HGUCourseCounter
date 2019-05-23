@@ -34,6 +34,7 @@ public class HGUCoursePatternAnalyzer {
 		String resultPath = args[1]; // the file path where the results are saved.
 		ArrayList<String> lines = Utils.getLines(dataPath, true);
 		
+		students = new HashMap<String,Student>();
 		students = loadStudentCourseRecords(lines);
 		
 		// To sort HashMap entries by key values so that we can save the results by student ids in ascending order.
@@ -58,11 +59,12 @@ public class HGUCoursePatternAnalyzer {
 		
 	      for(String stringFromLine : lines) {
 	         Course CourseToAdd = new Course(stringFromLine);
-	         String studentIdToCheck = new String(CourseToAdd.getStudentId());
+	         String studentIdToCheck = CourseToAdd.getStudentId();
 	         
 	         //if the student Id already exists in HashMap
 	         if(!students.containsKey(studentIdToCheck)) {
 	        	 Student studentToAdd = new Student(studentIdToCheck);
+	        	 studentToAdd.addCourse(CourseToAdd);
 	        	 students.put(studentIdToCheck, studentToAdd);
 	         }
 	         //if there is no same thing in HashMap 
@@ -93,18 +95,19 @@ public class HGUCoursePatternAnalyzer {
 		
 		// TODO: Implement this method 
 		ArrayList<String> numberOfCoursesTakenInEachSemester = new ArrayList<String>();
-		int inputSemester = 1;
-		String studentId;
 		int totalSemester;
+		String studentId = new String();
 		
 		for(int  i = 1; i < sortedStudents.size(); i++) {
-			Student studentToCheck = sortedStudents.get(i);
+			Student studentToCheck = sortedStudents.get(Integer.toString(i));
 			studentId = studentToCheck.getStudentId();
+			System.out.println(studentId);
 			totalSemester = studentToCheck.getSemestersByYearAndSemester().size();
 			
 			for(int j = 1; j < studentToCheck.getSemestersByYearAndSemester().size(); j++) {
 				int numOfCoursesInNthSemester = studentToCheck.getNumCourseInNthSemester(j);
-				String toAdd = studentId + "," + totalSemester + "," + j + "," + numOfCoursesInNthSemester;
+				String studentIdToAdd = String.format("%05d", studentId);
+				String toAdd = studentIdToAdd + "," + totalSemester + "," + j + "," + numOfCoursesInNthSemester;
 				numberOfCoursesTakenInEachSemester.add(toAdd);
 			}
 		}
