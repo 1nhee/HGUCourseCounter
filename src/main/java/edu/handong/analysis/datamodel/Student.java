@@ -14,12 +14,12 @@ public class Student {
 	                                                         // e.g., 2003-1, 
 	public Student(String studentId) { // constructor
 		this.studentId = studentId;
-		coursesTaken = new ArrayList<Course>();
 	}
 
 	public void addCourse(Course newRecord) {
 		/*add a Course instance created 
 		while reading line to the CourseTaken ArrayList in the Student instance.*/
+		coursesTaken = new ArrayList<Course>();
 		this.coursesTaken.add(newRecord);
 		
 	}
