@@ -14,6 +14,7 @@ public class Student {
 	                                                         // e.g., 2003-1, 
 	public Student(String studentId) { // constructor
 		this.studentId = studentId;
+		coursesTaken = new ArrayList<Course>();
 	}
 
 	public void addCourse(Course newRecord) {
