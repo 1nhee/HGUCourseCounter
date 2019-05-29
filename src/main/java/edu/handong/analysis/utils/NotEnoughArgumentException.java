@@ -12,4 +12,10 @@ public class NotEnoughArgumentException extends Exception{
 		String CLIString = "No CLI argument Exception! Please put a file path.";
 		System.out.println(CLIString);
 	}
+	
+	public NotEnoughArgumentException(String message1, String message2){
+		String CLIString = "The file path does not exist. Please check your CLI argument!";
+		System.out.println(CLIString);
+		System.exit(0);
+	}
 }

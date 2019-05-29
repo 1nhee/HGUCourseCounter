@@ -1,7 +1,10 @@
 package edu.handong.analysis.datamodel;
 
-import java.lang.Integer;
-import java.lang.String;
+import java.io.Reader;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
  
 public class Course {
 	private String studentId;
@@ -14,17 +17,19 @@ public class Course {
 	private int yearTaken;
 	private int semesterCourseTaken;
 	
-	public Course(String line) { 
+	public Course(CSVRecord csvRecord) { 
+		
 		// Split the line from constructor to initialize the field.
-		this.studentId = line.split(", ")[0];
-		this.yearMonthGraduated = line.split(", ")[1];
-		this.firstMajor = line.split(", ")[2];
-		this.secondMajor = line.split(", ")[3];
-		this.courseCode = line.split(", ")[4];
-		this.courseName = line.split(", ")[5];
-		this.courseCredit = line.split(", ")[6];
-		this.yearTaken = Integer.parseInt(line.split(", ")[7]);
-		this.semesterCourseTaken = Integer.parseInt(line.split(", ")[8]);
+		
+		this.studentId = ((CSVRecord) csvRecord).get(0);		
+		this.yearMonthGraduated = csvRecord.get(1);
+		this.firstMajor = csvRecord.get(2);
+		this.secondMajor = csvRecord.get(3);
+		this.courseCode = csvRecord.get(4);
+		this.courseName = csvRecord.get(5);
+		this.courseCredit = csvRecord.get(6);
+		this.yearTaken = Integer.parseInt(csvRecord.get(7));
+		this.semesterCourseTaken = Integer.parseInt(csvRecord.get(8));
 	}
 	
 	//getter and setter
