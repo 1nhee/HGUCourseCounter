@@ -33,7 +33,7 @@ public class HGUCoursePatternAnalyzer {
 	//CLI Variables
 	String Input_path;
 	String Output_path;
-	String Analysis_option;
+	int Analysis_option;
 	String course_code;
 	int Start_year_for_analysis;
 	int End_year_for_analysis;
@@ -155,8 +155,11 @@ public class HGUCoursePatternAnalyzer {
 		return numberOfCoursesTakenInEachSemester; // do not forget to return a proper variable
 	}//end of method
 	
-	//CLI
+	private rateOfStudentsTakingTheGivenCourse () {
+		
+	}
 	
+	//CLI
 	public boolean parseOptions(Options options, String[] args) {
 		CommandLineParser parser = new DefaultParser();
 
@@ -166,10 +169,10 @@ public class HGUCoursePatternAnalyzer {
 
 			Input_path = cmd.getOptionValue("i");
 			Output_path = cmd.getOptionValue("o");
-			Analysis_option = cmd.getOptionValue("a");
+			Analysis_option = Integer.parseInt(cmd.getOptionValue("a"));
 			course_code = cmd.getOptionValue("c");
-			Start_year_for_analysis = cmd.getOptionValue("s");
-			End_year_for_analysis = cmd.getOptionValue("e");
+			Start_year_for_analysis = Integer.parseInt(cmd.getOptionValue("s"));
+			End_year_for_analysis = Integer.parseInt(cmd.getOptionValue("e"));
 			Help = cmd.hasOption("h");
 
 		} catch (Exception e) {
