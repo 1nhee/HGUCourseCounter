@@ -81,7 +81,8 @@ public class HGUCoursePatternAnalyzer {
 		students = loadStudentCourseRecords(csvParser);
 		
 		// To sort HashMap entries by key values so that we can save the results by student ids in ascending order.
-		Map<String, Student> sortedStudents = new TreeMap<String,Student>(students); 
+		Map<String, Student> sortedStudents = new TreeMap<String,Student>(students);
+		Map<String, Integer> totalStudent = getTotalStudentsNumberByYearAndSemseter(students); 
 		
 		// Generate result lines to be saved.
 		ArrayList<String> linesToBeSaved = countNumberOfCoursesTakenInEachSemester(sortedStudents);
@@ -161,7 +162,13 @@ public class HGUCoursePatternAnalyzer {
 		return numberOfCoursesTakenInEachSemester; // do not forget to return a proper variable
 	}//end of method
 	
-	private rateOfStudentsTakingTheGivenCourse () {
+	/*
+	 * private rateOfStudentsTakingTheGivenCourse () {
+	 * 
+	 * }
+	 */
+	
+	private Map<String, Integer> getTotalStudentsNumberByYearAndSemseter() {
 		
 	}
 	
