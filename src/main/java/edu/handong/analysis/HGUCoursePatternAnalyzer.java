@@ -2,6 +2,8 @@ package edu.handong.analysis;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -84,8 +86,12 @@ public class HGUCoursePatternAnalyzer {
 		// Generate result lines to be saved.
 		ArrayList<String> linesToBeSaved = countNumberOfCoursesTakenInEachSemester(sortedStudents);
 		
-		// Write a file (named like the value of resultPath) with linesTobeSaved.
-		writeAFile(linesToBeSaved, Output_path);
+		if(Analysis_option == 1) {
+			Utils.writeAFile(linesToBeSaved, Output_path);
+		}else if(Analysis_option == 2) {
+			// Write a file (named like the value of resultPath) with linesTobeSaved.
+			writeAFile(linesToBeSaved, Output_path);
+		}
 	}
 	
 	/**
