@@ -19,6 +19,7 @@ public class Student {
 		this.studentId = studentId;
 		coursesTaken = new ArrayList<Course>();
 		semestersByYearAndSemester = new HashMap<String,Integer>();
+		yearsAndSemesters = new ArrayList<String>();
 	}
 
 	public void addCourse(Course newRecord) {
@@ -45,15 +46,35 @@ public class Student {
 					yearToCheck = courseToCheck.getYearTaken();
 					semesterToCheck = courseToCheck.getSemesterCourseTaken();
 					
-					if(!yearsAndSemesters.contains(yearToCheck + "-" + semesterToCheck)) {
-						yearsAndSemesters.add(yearToCheck + "-" + semesterToCheck);
-					}
-					
 					semestersByYearAndSemester.put(yearToCheck + "-" + semesterToCheck, whatSemester);
 					whatSemester++;
 				}
 		}
+		
 		return this.semestersByYearAndSemester;
+	}
+	
+	public ArrayList<String> getYearsAndSemestersMethod(){
+		/*creates a hashmap to store the student’s sequential semester information 
+		by using string year and semester information.*/
+		
+		int yearToCheck = coursesTaken.get(0).getYearTaken();
+		int semesterToCheck = coursesTaken.get(0).getSemesterCourseTaken();
+		
+		String startSemesterStrig  = yearToCheck + "-" + semesterToCheck; 
+		
+		this.yearsAndSemesters.add(startSemesterStrig);
+		
+		for(Course courseToCheck:this.coursesTaken) {
+				if(courseToCheck.getYearTaken() != yearToCheck || courseToCheck.getSemesterCourseTaken() != semesterToCheck) {
+					yearToCheck = courseToCheck.getYearTaken();
+					semesterToCheck = courseToCheck.getSemesterCourseTaken();
+					
+					this.yearsAndSemesters.add(yearToCheck + "-" + semesterToCheck);
+				}
+		}
+		
+		return this.yearsAndSemesters;
 	}
 	
 	public int getNumCourseInNthSemester(int semester) {
