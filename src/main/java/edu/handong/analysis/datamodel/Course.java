@@ -21,7 +21,7 @@ public class Course {
 		
 		// Split the line from constructor to initialize the field.
 		
-		this.studentId = ((CSVRecord) csvRecord).get(0);		
+		this.studentId = csvRecord.get(0);		
 		this.yearMonthGraduated = csvRecord.get(1);
 		this.firstMajor = csvRecord.get(2);
 		this.secondMajor = csvRecord.get(3);
