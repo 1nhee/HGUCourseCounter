@@ -82,7 +82,7 @@ public class HGUCoursePatternAnalyzer {
 		
 		// To sort HashMap entries by key values so that we can save the results by student ids in ascending order.
 		Map<String, Student> sortedStudents = new TreeMap<String,Student>(students);
-		Map<String, Integer> totalStudent = getTotalStudentsNumberByYearAndSemseter(students); 
+		HashMap<String, Integer> totalStudents = getTotalStudentsNumberByYearAndSemseter(students); 
 		
 		// Generate result lines to be saved.
 		ArrayList<String> linesToBeSaved = countNumberOfCoursesTakenInEachSemester(sortedStudents);
@@ -168,8 +168,27 @@ public class HGUCoursePatternAnalyzer {
 	 * }
 	 */
 	
-	private Map<String, Integer> getTotalStudentsNumberByYearAndSemseter() {
+	private HashMap<String, Integer> getTotalStudentsNumberByYearAndSemseter(HashMap<String,Student> students) {
 		
+		HashMap<String, Integer> totalStudents;
+		
+		for(int  i = 0; i < students.size(); i++) {
+			String studentIdToCheck = String.format("%04d", i+1);
+			Student studentToCheck = students.get(studentIdToCheck);
+			
+			ArrayList<String> arrayListToCheck = studentToCheck.getYearsAndSemesters();
+			
+			for(String toCheckYearAndSemester: arrayListToCheck) {
+				int mid = toCheckYearAndSemester.indexOf("-");
+				int year = Integer.parseInt(toCheckYearAndSemester.substring(0,mid-1));
+				int semester = Integer.parseInt(toCheckYearAndSemester.substring(mid+1));
+				
+				if(Start_year_for_analysis < year && year < End_year_for_analysis) {
+					
+				}
+			}
+		} 
+		return totalStudents;
 	}
 	
 	//CLI
