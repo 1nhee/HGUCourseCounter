@@ -30,168 +30,244 @@ import edu.handong.analysis.utils.Utils;
 
 public class HGUCoursePatternAnalyzer {
 
-	private HashMap<String,Student> students;
-	
-	//CLI Variables
+	private HashMap<String, Student> students;
+
+	// CLI Variables
 	String Input_path;
 	String Output_path;
 	int Analysis_option;
 	String course_code;
 	int Start_year_for_analysis;
 	int End_year_for_analysis;
-	boolean Help;		
-	
+	boolean Help;
+	String courseNameByCourseCode;
+
 	Options options = createOptions();
-	
+
 	/**
-	 * This method runs our analysis logic to save the number courses taken by each student per semester in a result file.
-	 * Run method must not be changed!!
+	 * This method runs our analysis logic to save the number courses taken by each
+	 * student per semester in a result file. Run method must not be changed!!
+	 * 
 	 * @param args
+	 * @throws IOException 
 	 */
-	public void run(String[] args) {
-		
+	public void run(String[] args) throws IOException {
+
 		try {
-			// when there are not enough arguments from CLI, it throws the NotEnoughArgmentException which must be defined by you.
-			if(args.length<2)
+			// when there are not enough arguments from CLI, it throws the
+			// NotEnoughArgmentException which must be defined by you.
+			if (args.length < 2)
 				throw new NotEnoughArgumentException();
 		} catch (NotEnoughArgumentException e) {
 			System.out.println(e.getMessage());
 			System.exit(0);
 		}
-		
+
 		Input_path = args[0]; // csv file to be analyzed
 		Output_path = args[1]; // the file path where the results are saved.
-		
-		//ArrayList<String> lines = Utils.getLines(Input_path, true);
+
+		// ArrayList<String> lines = Utils.getLines(Input_path, true);
 		Reader reader = Files.newBufferedReader(Paths.get(Input_path));
-        CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT
-                .withFirstRecordAsHeader()
-                .withIgnoreHeaderCase()
-                .withTrim());
-		
-		if(parseOptions(options, args)){
-			if (Help){
+		CSVParser csvParser = new CSVParser(reader,
+				CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());
+
+		if (parseOptions(options, args)) {
+			if (Help) {
 				printHelp(options);
 				return;
 			}
 		}
 
-		
-		students = new HashMap<String,Student>();
+		students = new HashMap<String, Student>();
 		students = loadStudentCourseRecords(csvParser);
-		
-		// To sort HashMap entries by key values so that we can save the results by student ids in ascending order.
-		Map<String, Student> sortedStudents = new TreeMap<String,Student>(students);
-		HashMap<String, Integer> totalStudents = getTotalStudentsNumberByYearAndSemseter(students); 
-		
+
+		// To sort HashMap entries by key values so that we can save the results by
+		// student ids in ascending order.
+		Map<String, Student> sortedStudents = new TreeMap<String, Student>(students);
+		HashMap<String, Integer> totalStudents = getTotalStudentsNumberByYearAndSemseter(students);
+		HashMap<String, Integer> courseStudents = getNumberOfStudentsByCourseCode(students);
+		ArrayList<String> rateAdded = rateOfStudentsTakingTheGivenCourse(totalStudents, courseStudents);
+
 		// Generate result lines to be saved.
 		ArrayList<String> linesToBeSaved = countNumberOfCoursesTakenInEachSemester(sortedStudents);
-		
-		if(Analysis_option == 1) {
+
+		if (Analysis_option == 1) {
 			Utils.writeAFile(linesToBeSaved, Output_path);
-		}else if(Analysis_option == 2) {
+		} else if (Analysis_option == 2) {
 			// Write a file (named like the value of resultPath) with linesTobeSaved.
-			writeAFile(linesToBeSaved, Output_path);
+			writeAFile(rateAdded, Output_path);
 		}
 	}
-	
+
 	/**
-	 * This method create HashMap<String,Student> from the data csv file. Key is a student id and the corresponding object is an instance of Student.
-	 * The Student instance have all the Course instances taken by the student.
+	 * This method create HashMap<String,Student> from the data csv file. Key is a
+	 * student id and the corresponding object is an instance of Student. The
+	 * Student instance have all the Course instances taken by the student.
+	 * 
 	 * @param lines
 	 * @return
 	 */
-	private HashMap<String,Student> loadStudentCourseRecords(CSVParser csvParser) {
-		
+	private HashMap<String, Student> loadStudentCourseRecords(CSVParser csvParser) {
+
 		// TODO: Implement this method
-		
+
 		for (CSVRecord csvRecord : csvParser) {
-            // Accessing values by Header names
+			// Accessing values by Header names
 			Course CourseToAdd = new Course(csvRecord);
-	        String studentIdToCheck = CourseToAdd.getStudentId();
-	         
-	         //if the student Id already exists in HashMap
-	         if(!students.containsKey(studentIdToCheck)) {
-	        	 Student studentToAdd = new Student(studentIdToCheck);
-	        	 studentToAdd.addCourse(CourseToAdd);
-	        	 students.put(studentIdToCheck, studentToAdd);
-	         }
-	         //if there is no same thing in HashMap 
-	         else {
-	        	 Student studentInstanceToAddCourse = students.get(studentIdToCheck);
-	        	 studentInstanceToAddCourse.addCourse(CourseToAdd);
-	        	 students.put(studentIdToCheck, studentInstanceToAddCourse);
-	         }
-	      }
-		
+			String studentIdToCheck = CourseToAdd.getStudentId();
+
+			// if the student Id already exists in HashMap
+			if (!students.containsKey(studentIdToCheck)) {
+				Student studentToAdd = new Student(studentIdToCheck);
+				studentToAdd.addCourse(CourseToAdd);
+				students.put(studentIdToCheck, studentToAdd);
+			}
+			// if there is no same thing in HashMap
+			else {
+				Student studentInstanceToAddCourse = students.get(studentIdToCheck);
+				studentInstanceToAddCourse.addCourse(CourseToAdd);
+				students.put(studentIdToCheck, studentInstanceToAddCourse);
+			}
+		}
+
 		return students; // do not forget to return a proper variable.
 	}
 
 	/**
-	 * This method generate the number of courses taken by a student in each semester. The result file look like this:
-	 * StudentID, TotalNumberOfSemestersRegistered, Semester, NumCoursesTakenInTheSemester
-	 * 0001,14,1,9
-     * 0001,14,2,8
-	 * ....
+	 * This method generate the number of courses taken by a student in each
+	 * semester. The result file look like this: StudentID,
+	 * TotalNumberOfSemestersRegistered, Semester, NumCoursesTakenInTheSemester
+	 * 0001,14,1,9 0001,14,2,8 ....
 	 * 
-	 * 0001,14,1,9 => this means, 0001 student registered 14 semeters in total. In the first semeter (1), the student took 9 courses.
+	 * 0001,14,1,9 => this means, 0001 student registered 14 semeters in total. In
+	 * the first semeter (1), the student took 9 courses.
 	 * 
 	 * 
 	 * @param sortedStudents
 	 * @return
 	 */
 	private ArrayList<String> countNumberOfCoursesTakenInEachSemester(Map<String, Student> sortedStudents) {
-		
-		// TODO: Implement this method 
+
+		// TODO: Implement this method
 		ArrayList<String> numberOfCoursesTakenInEachSemester = new ArrayList<String>();
 		int totalSemester;
-		
-		for(int  i = 0; i < sortedStudents.size(); i++) {
-			String studentIdToCheck = String.format("%04d", i+1);
+
+		for (int i = 0; i < sortedStudents.size(); i++) {
+			String studentIdToCheck = String.format("%04d", i + 1);
 			Student studentToCheck = sortedStudents.get(studentIdToCheck);
 			String studentId = studentToCheck.getStudentId();
 			totalSemester = studentToCheck.getSemestersByYearAndSemester().size();
-			
-			for(int j = 0; j < studentToCheck.getSemestersByYearAndSemester().size(); j++) {
-				int numOfCoursesInNthSemester = studentToCheck.getNumCourseInNthSemester(j+1);
+
+			for (int j = 0; j < studentToCheck.getSemestersByYearAndSemester().size(); j++) {
+				int numOfCoursesInNthSemester = studentToCheck.getNumCourseInNthSemester(j + 1);
 				String studentIdToAdd = studentId;
 				String toAdd = studentIdToAdd + "," + totalSemester + "," + j + "," + numOfCoursesInNthSemester;
 				numberOfCoursesTakenInEachSemester.add(toAdd);
 			}
 		}
 		return numberOfCoursesTakenInEachSemester; // do not forget to return a proper variable
-	}//end of method
-	
-	/*
-	 * private rateOfStudentsTakingTheGivenCourse () {
-	 * 
-	 * }
-	 */
-	
-	private HashMap<String, Integer> getTotalStudentsNumberByYearAndSemseter(HashMap<String,Student> students) {
+	}// end of method
+
+	private ArrayList<String> rateOfStudentsTakingTheGivenCourse(HashMap<String, Integer> totalByYear, HashMap<String, Integer> totalByCoursecode) {
+		ArrayList<String> addRate; 
 		
-		HashMap<String, Integer> totalStudents;
-		
-		for(int  i = 0; i < students.size(); i++) {
-			String studentIdToCheck = String.format("%04d", i+1);
-			Student studentToCheck = students.get(studentIdToCheck);
+		for(int i = 0; i < totalByYear.size(); i++) {
+			int year = Start_year_for_analysis + i;
+			String semester1 = year + "-" + "1";
+			String semester2 = year + "-" + "2";
 			
-			ArrayList<String> arrayListToCheck = studentToCheck.getYearsAndSemesters();
-			
-			for(String toCheckYearAndSemester: arrayListToCheck) {
-				int mid = toCheckYearAndSemester.indexOf("-");
-				int year = Integer.parseInt(toCheckYearAndSemester.substring(0,mid-1));
-				int semester = Integer.parseInt(toCheckYearAndSemester.substring(mid+1));
-				
-				if(Start_year_for_analysis < year && year < End_year_for_analysis) {
-					
+			for(int j = 0; j < 2; j++) {
+				//first semester
+				if(j == 0) {
+					int intTotalByYear = totalByYear.get(semester1);
+					int intTotalByCoursecode = totalByCoursecode.get(semester1);
+					float rateToPut = intTotalByCoursecode / intTotalByYear;
+					String rateString = year + "," + "1," + this.course_code + "," + this.courseNameByCourseCode + intTotalByYear + "," + intTotalByCoursecode + "," + rateToPut + "%";
+					addRate.add(rateString);
+				//second semeseter
+				}else {
+					int intTotalByYear = totalByYear.get(semester2);
+					int intTotalByCoursecode = totalByCoursecode.get(semester2);
+					float rateToPut = intTotalByCoursecode / intTotalByYear;
+					String rateString = year + "," + "2," + this.course_code + "," + this.courseNameByCourseCode + intTotalByYear + "," + intTotalByCoursecode + "," + rateToPut + "%";
+					addRate.add(rateString);
 				}
 			}
-		} 
-		return totalStudents;
+		}
+		
+		return addRate;
 	}
-	
-	//CLI
+
+	private HashMap<String, Integer> getNumberOfStudentsByCourseCode(HashMap<String, Student> students) {
+
+		HashMap<String, Integer> courseStudents = null;
+
+		for (int i = 0; i < students.size(); i++) {
+			String studentIdToCheck = String.format("%04d", i + 1);
+			Student studentToCheck = students.get(studentIdToCheck);
+
+			ArrayList<Course> arrayListToCheck = studentToCheck.getCoursesTaken();
+
+			for (Course toCheckCourse : arrayListToCheck) {
+				int yearTaken = toCheckCourse.getYearTaken();
+				int semesterTaken = toCheckCourse.getSemesterCourseTaken();
+				String courseCodeToCheck = toCheckCourse.getCourseCode();
+				String toCheckYearAndSemester = yearTaken + "-" + semesterTaken;
+
+				if (Start_year_for_analysis < yearTaken && yearTaken < End_year_for_analysis) {
+					// there is no year
+					if (courseCodeToCheck.equals(this.course_code)) {
+						this.courseNameByCourseCode = toCheckCourse.getCourseName();
+						
+						//there is no year 
+						if (!(courseStudents.containsKey(toCheckYearAndSemester))) {
+							courseStudents.put(toCheckYearAndSemester, 1);
+							// update the number of students 
+							} else { 
+								int totalNum = courseStudents.get(toCheckYearAndSemester);
+								totalNum++; 
+								courseStudents.put(toCheckYearAndSemester, totalNum); 
+
+							}
+					}
+				}
+			}
+		}
+		return courseStudents;
+	}
+
+	private HashMap<String, Integer> getTotalStudentsNumberByYearAndSemseter(HashMap<String, Student> students) {
+
+		HashMap<String, Integer> totalStudents = null;
+		 
+		for (int i = 0; i < students.size(); i++) { 
+			String studentIdToCheck = String.format("%04d", i + 1); 
+			Student studentToCheck = students.get(studentIdToCheck);
+		  
+			ArrayList<String> arrayListToCheck = studentToCheck.getYearsAndSemesters();
+		 
+			for (String toCheckYearAndSemester : arrayListToCheck) { 
+				int mid = toCheckYearAndSemester.indexOf("-"); 
+				int year = Integer.parseInt(toCheckYearAndSemester.substring(0, mid - 1)); 
+				int semester = Integer.parseInt(toCheckYearAndSemester.substring(mid + 1));
+				
+				if (Start_year_for_analysis < year && year < End_year_for_analysis) {
+					//there is no year 
+					if (!(totalStudents.containsKey(toCheckYearAndSemester))) {
+						totalStudents.put(toCheckYearAndSemester, 1);
+						// update the number of students 
+						} else { 
+							int totalNum = totalStudents.get(toCheckYearAndSemester);
+							totalNum++; 
+							totalStudents.put(toCheckYearAndSemester, totalNum); 
+							} 
+					} 
+				} 
+			}
+		 return totalStudents;
+	}
+
+	// CLI
 	public boolean parseOptions(Options options, String[] args) {
 		CommandLineParser parser = new DefaultParser();
 
@@ -218,65 +294,38 @@ public class HGUCoursePatternAnalyzer {
 	// Definition Stage
 	public Options createOptions() {
 		Options options = new Options();
-		
+
 		// add options by using OptionBuilder
-				options.addOption(Option.builder("i").longOpt("input")
-						.desc("Set an input file path")
-						.hasArg()
-						.argName("Output_path")
-						.required()
-						.build());
-		
-				options.addOption(Option.builder("o").longOpt("output")
-						.desc("Set an output file path")
-						.hasArg()
-						.argName("Output_path")
-						.required()
-						.build());
-				
-				options.addOption(Option.builder("a").longOpt("analysis")
-						.desc("1: Count courses per semester, 2: Count per course name and year")
-						.hasArg()
-						.argName("Analysis_option")
-						.required()
-						.build());
-				
-				options.addOption(Option.builder("c").longOpt("coursecode")
-						.desc("Course code for '-a 2' option")
-						.hasArg()
-						.argName("course code")
-						.required()
-						.build());
-				
-				options.addOption(Option.builder("s").longOpt("startyear")
-						.desc("Set the start year for analysis e.g., -s 2002")
-						.hasArg()
-						.argName("Start_year_for_analysis")
-						.required()
-						.build());
-				
-				
-				options.addOption(Option.builder("e").longOpt("endyear")
-						.desc("Set the end year for analysis e.g., -e 2005")
-						.hasArg()
-						.argName("End_year_for_analysis")
-						.required()
-						.build());
-				
+		options.addOption(Option.builder("i").longOpt("input").desc("Set an input file path").hasArg()
+				.argName("Output_path").required().build());
+
+		options.addOption(Option.builder("o").longOpt("output").desc("Set an output file path").hasArg()
+				.argName("Output_path").required().build());
+
+		options.addOption(Option.builder("a").longOpt("analysis")
+				.desc("1: Count courses per semester, 2: Count per course name and year").hasArg()
+				.argName("Analysis_option").required().build());
+
+		options.addOption(Option.builder("c").longOpt("coursecode").desc("Course code for '-a 2' option").hasArg()
+				.argName("course code").required().build());
+
+		options.addOption(Option.builder("s").longOpt("startyear").desc("Set the start year for analysis e.g., -s 2002")
+				.hasArg().argName("Start_year_for_analysis").required().build());
+
+		options.addOption(Option.builder("e").longOpt("endyear").desc("Set the end year for analysis e.g., -e 2005")
+				.hasArg().argName("End_year_for_analysis").required().build());
+
 		// add options by using OptionBuilder
-		options.addOption(Option.builder("h").longOpt("help")
-				        .desc("Show a Help page")
-				        .argName("Help")
-				        .build());
-				
+		options.addOption(Option.builder("h").longOpt("help").desc("Show a Help page").argName("Help").build());
+
 		return options;
 	}
-	
+
 	private void printHelp(Options HGUCourseCounter) {
 		// automatically generate the help statement
 		HelpFormatter formatter = new HelpFormatter();
 		String header = "HGU Course Analyzer";
-		String footer =""; // Leave this empty.
+		String footer = ""; // Leave this empty.
 		formatter.printHelp("CLIExample", header, options, footer, true);
 	}
 
@@ -295,7 +344,4 @@ public class HGUCoursePatternAnalyzer {
 		    }
 	}
 
-
-
-	
-}//end of class
+}// end of class
