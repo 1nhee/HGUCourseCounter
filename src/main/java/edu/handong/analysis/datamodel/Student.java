@@ -9,9 +9,12 @@ public class Student {
 	
 	private String studentId;
 	private ArrayList<Course> coursesTaken; // List of courses student has taken
+	private ArrayList<String> yearsAndSemesters;
 	private HashMap<String,Integer> semestersByYearAndSemester; 
 	                                                         // key: Year-Semester
 	                                                         // e.g., 2003-1, 
+	
+	
 	public Student(String studentId) { // constructor
 		this.studentId = studentId;
 		coursesTaken = new ArrayList<Course>();
@@ -42,6 +45,7 @@ public class Student {
 					yearToCheck = courseToCheck.getYearTaken();
 					semesterToCheck = courseToCheck.getSemesterCourseTaken();
 					
+					yearsAndSemesters.add(yearToCheck + "-" + semesterToCheck);
 					semestersByYearAndSemester.put(yearToCheck + "-" + semesterToCheck, whatSemester);
 					whatSemester++;
 				}
