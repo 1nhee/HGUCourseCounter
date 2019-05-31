@@ -45,7 +45,10 @@ public class Student {
 					yearToCheck = courseToCheck.getYearTaken();
 					semesterToCheck = courseToCheck.getSemesterCourseTaken();
 					
-					yearsAndSemesters.add(yearToCheck + "-" + semesterToCheck);
+					if(!yearsAndSemesters.contains(yearToCheck + "-" + semesterToCheck)) {
+						yearsAndSemesters.add(yearToCheck + "-" + semesterToCheck);
+					}
+					
 					semestersByYearAndSemester.put(yearToCheck + "-" + semesterToCheck, whatSemester);
 					whatSemester++;
 				}
@@ -91,6 +94,16 @@ public class Student {
 	public void setCoursesTaken(ArrayList<Course> Courses_Taken) {
 		this.coursesTaken = Courses_Taken;
 	}
+	
+	
+	public ArrayList<String> getYearsAndSemesters() {
+		return this.yearsAndSemesters;
+	}
+	
+	public void setYearsAndSemesters(ArrayList<String> years_and_semesters) {
+		this.yearsAndSemesters = years_and_semesters;
+	}
+	
 	
 	/*
 	 * public HashMap<String,Integer> getSemestersByYearAndSemester(){ return
