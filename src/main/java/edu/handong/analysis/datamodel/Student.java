@@ -77,7 +77,7 @@ public class Student {
 		return this.yearsAndSemesters;
 	}
 	
-	public int getNumCourseInNthSemester(int semester) {
+	public int getNumCourseInNthSemester(String yearAndSemester) {
 		/*returns the number of subjects in the semester 
 		 * if you enter the sequential semester number.
 		HashMap에 key로 학기 수를 입력하면 그 학기 때 들었던  과목의 수를 return*/
@@ -85,14 +85,13 @@ public class Student {
 		int numOfCoursesInNthSemester = 0;
 		int yearToCheck;
 		int semesterToCheck;
-		int inputSemesterToCheck;
 	
 		for(Course courseToCheck:this.coursesTaken) {
 			yearToCheck = courseToCheck.getYearTaken();
 			semesterToCheck = courseToCheck.getSemesterCourseTaken();
-			inputSemesterToCheck = this.semestersByYearAndSemester.get(yearToCheck + "-" + semesterToCheck);
+			String toCheck = yearToCheck + "-" + semesterToCheck;
 			
-			if(inputSemesterToCheck == semester) {
+			if(yearAndSemester.equals(toCheck)) {
 				numOfCoursesInNthSemester++;
 			}
 		} 
@@ -125,15 +124,12 @@ public class Student {
 		this.yearsAndSemesters = years_and_semesters;
 	}
 	
-	
-	/*
-	 * public HashMap<String,Integer> getSemestersByYearAndSemester(){ return
-	 * this.semestersByYearAndSemester; }
-	 */
-	
 	public void setSemestersByYearAndSemester(HashMap<String,Integer> Semesters_By_Year_And_Semester) {
 		this.semestersByYearAndSemester = Semesters_By_Year_And_Semester;
 	}
 	
+	public HashMap<String, Integer> getterSemestersByYearAndSemester() {
+		return this.semestersByYearAndSemester;
+	}
 	
 }
