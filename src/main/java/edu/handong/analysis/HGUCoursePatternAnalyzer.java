@@ -161,6 +161,7 @@ public class HGUCoursePatternAnalyzer {
 		
 		// TODO: Implement this method
 		ArrayList<String> numberOfCoursesTakenInEachSemester = new ArrayList<String>();
+		numberOfCoursesTakenInEachSemester.add("StudentID, TotalNumberOfSemestersRegistered, Semester, NumCoursesTakenInTheSemester");
 
 		for (int i = 0; i < sortedStudents.size(); i++) {
 			
@@ -269,6 +270,8 @@ private ArrayList<String> rateOfStudentsTakingTheGivenCourse(HashMap<String, Int
 		
 		ArrayList<String> addRate = new ArrayList<String>(); 
 	
+		addRate.add("Year, Semester, CourseCode, CourseName, TatalStudents, StudentsTakenCourse, Rate");
+		
 		for(int i = 0; i < totalByYear.size(); i++) {
 			int year = Start_year_for_analysis + i;
 			
