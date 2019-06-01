@@ -91,9 +91,11 @@ public class HGUCoursePatternAnalyzer {
 
 		if (Analysis_option == 1) {
 			Utils.writeAFile(linesToBeSaved, Output_path);
+			System.out.println("Your result is made! Check this file: " + Output_path);
 		} else if (Analysis_option == 2) {
 			// Write a file (named like the value of resultPath) with linesTobeSaved.
 			Utils.writeAFile(rateAdded, Output_path);
+			System.out.println("Your result is made! Check this file: " + Output_path);
 		}
 	}
 
@@ -147,32 +149,40 @@ public class HGUCoursePatternAnalyzer {
 	 * @return
 	 */
 	private ArrayList<String> countNumberOfCoursesTakenInEachSemester(Map<String, Student> sortedStudents) {
-
+		
 		// TODO: Implement this method
 		ArrayList<String> numberOfCoursesTakenInEachSemester = new ArrayList<String>();
-		int totalSemester;
 
 		for (int i = 0; i < sortedStudents.size(); i++) {
+			
 			String studentIdToCheck = String.format("%04d", i + 1);
 			Student studentToCheck = sortedStudents.get(studentIdToCheck);
 			String studentId = studentToCheck.getStudentId();
-			totalSemester = studentToCheck.getSemestersByYearAndSemester().size();
+			int totalSemester = 0;
 			
-			for(int k = this.Start_year_for_analysis; k < End_year_for_analysis; k++) {
-				for(int l = 1; l < 5; l++) {
-					if(studentToCheck.getSemestersByYearAndSemester().containsKey(k + "-" + l)) {
-						for (int j = 0; j < totalSemester; j++) {
-							int numOfCoursesInNthSemester = studentToCheck.getNumCourseInNthSemester(j + 1);
-							String studentIdToAdd = studentId;
-							String toAdd = studentIdToAdd + "," + totalSemester + "," + j + "," + numOfCoursesInNthSemester;
-							numberOfCoursesTakenInEachSemester.add(toAdd);
-						}
-					}
-				}
+			studentToCheck.getYearsAndSemestersMethod();
+			
+			ArrayList<String> toCheckStartYearAndSemester = new ArrayList<String>();
+			toCheckStartYearAndSemester = studentToCheck.getYearsAndSemesters();
+			
+			ArrayList<Integer> forNumOfInNthSemester = new ArrayList<Integer>();
+			
+			for(String toCheckYear : toCheckStartYearAndSemester) {
+				int year = Integer.parseInt(toCheckYear.substring(0, 4));
 				
+				if((this.Start_year_for_analysis <= year) && (year <= this.End_year_for_analysis ) ){
+					totalSemester++;
+					forNumOfInNthSemester.add(studentToCheck.getNumCourseInNthSemester(toCheckYear));
+				}
 			}
-			
+		
+			for(int j = 0; j < forNumOfInNthSemester.size(); j++){
+				String studentIdToAdd = studentId;
+				String toAdd = studentIdToAdd + "," + totalSemester + "," + (j+1) + "," + forNumOfInNthSemester.get(j);
+				numberOfCoursesTakenInEachSemester.add(toAdd);
+			}	
 		}
+			
 		return numberOfCoursesTakenInEachSemester; // do not forget to return a proper variable
 	}// end of method
 
@@ -255,12 +265,24 @@ private ArrayList<String> rateOfStudentsTakingTheGivenCourse(HashMap<String, Int
 			
 			for(int j = 1; j < 5; j++) {
 				String toCheck = year + "-" + j;
-				if(totalByCoursecode.containsKey(toCheck)) {
+				
+				if(totalByYear.containsKey(toCheck) && totalByCoursecode.containsKey(toCheck)) {
 					int intTotalByYear = totalByYear.get(toCheck);
 					int intTotalByCoursecode = totalByCoursecode.get(toCheck);
 					float rateToPut = ((float)intTotalByCoursecode / (float)intTotalByYear)*100;
-					String rateString = year + "," + "1," + this.course_code + "," + this.courseNameByCourseCode + "," + intTotalByYear + "," + intTotalByCoursecode + "," + rateToPut + "%";
-					//System.out.println(rateString);
+					String rateString = year + "," + j + "," + this.course_code + "," + this.courseNameByCourseCode + "," + intTotalByYear + "," + intTotalByCoursecode + "," + rateToPut + "%";
+					addRate.add(rateString);
+				}else if(totalByYear.containsKey(toCheck) && (!totalByCoursecode.containsKey(toCheck))) {
+					int intTotalByYear = totalByYear.get(toCheck);
+					int intTotalByCoursecode = 0;
+					float rateToPut = ((float)intTotalByCoursecode / (float)intTotalByYear)*100;
+					String rateString = year + "," + j + "," + this.course_code + "," + this.courseNameByCourseCode + "," + intTotalByYear + "," + intTotalByCoursecode + "," + rateToPut + "%";
+					addRate.add(rateString);
+				}else if((!totalByYear.containsKey(toCheck)) && totalByCoursecode.containsKey(toCheck)) {
+					int intTotalByYear = 0;
+					int intTotalByCoursecode = totalByCoursecode.get(toCheck);
+					float rateToPut = ((float)intTotalByCoursecode / (float)intTotalByYear)*100;
+					String rateString = year + "," + j + "," + this.course_code + "," + this.courseNameByCourseCode + "," + intTotalByYear + "," + intTotalByCoursecode + "," + rateToPut + "%";
 					addRate.add(rateString);
 					}
 				}
@@ -332,19 +354,5 @@ private ArrayList<String> rateOfStudentsTakingTheGivenCourse(HashMap<String, Int
 		String footer = ""; // Leave this empty.
 		formatter.printHelp("CLIExample", header, options, footer, true);
 	}
-
-	/*
-	 * public void writeAFile(ArrayList<String> linesToBeSaved, String Output_path)
-	 * { try { BufferedWriter writer =
-	 * Files.newBufferedWriter(Paths.get(Output_path));
-	 * 
-	 * CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
-	 * 
-	 * for(String toSave: linesToBeSaved) { csvPrinter.printRecord(toSave); }
-	 * 
-	 * csvPrinter.flush(); }catch(Exception e) { e.printStackTrace(); }
-	 * 
-	 * }
-	 */
 
 }// end of class
