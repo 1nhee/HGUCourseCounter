@@ -53,6 +53,15 @@ public class HGUCoursePatternAnalyzer {
 	 * @throws IOException 
 	 */
 	public void run(String[] args) throws IOException {
+		
+		try {
+			// when there are not enough arguments from CLI, it throws the NotEnoughArgmentException which must be defined by you.
+			if(args.length<2)
+				throw new NotEnoughArgumentException();
+		} catch (NotEnoughArgumentException e) {
+			System.out.println(e.getMessage());
+			System.exit(0);
+		}
 
 		if (parseOptions(options, args)) {
 			if (Help) {
