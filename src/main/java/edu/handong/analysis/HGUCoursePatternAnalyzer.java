@@ -270,7 +270,7 @@ private ArrayList<String> rateOfStudentsTakingTheGivenCourse(HashMap<String, Int
 		
 		ArrayList<String> addRate = new ArrayList<String>(); 
 	
-		addRate.add("Year, Semester, CourseCode, CourseName, TatalStudents, StudentsTakenCourse, Rate");
+		addRate.add("Year, Semester, CourseCode, CourseName, TotalStudents, StudentsTakenCourse, Rate");
 		
 		for(int i = 0; i < totalByYear.size(); i++) {
 			int year = Start_year_for_analysis + i;
